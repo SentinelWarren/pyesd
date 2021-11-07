@@ -2,20 +2,29 @@ import json
 import asyncio
 import websockets
 
+from typing import Any, Dict
 from datetime import datetime
 from pyesd.esd_service import ESD
 
 class SignPayments:	
-    def __init__(self, db_uri, db_headers, esd_username, esd_password, endpoint, query_endpoint) -> None:
+    def __init__(
+        self,
+        db_uri: str,
+        db_headers: Dict[str, str],
+        esd_username: str,
+        esd_password: str,
+        endpoint: str,
+        query_endpoint: str
+    ) -> None:
         self.uri = db_uri
         self.headers = db_headers
         self.esd = ESD(esd_username, esd_password, endpoint, query_endpoint)
         self.esd_success = 'Document signed successfully.'
     
-    def _sign(self, entry: dict) -> dict:
-        vat_entry_id = entry.get('id')
+    def _sign(self, entry: Dict[str, Any]) -> Dict[str, Any]:
+        vat_entry_id: str = entry.get('id')
         vat_entry_type = entry.get('type')
-        vat_entry_amount = entry.get('amount')
+        vat_entry_amount: float = entry.get('amount')
         internal_id = entry.get('internal_id')
         
         esd_check_reply = self.esd.query(vat_entry_id)
@@ -51,7 +60,7 @@ class SignPayments:
                 'signature': ''
             }
 
-    def _sign_mock(self, entry: dict) -> dict:  # For testing only
+    def _sign_mock(self, entry: Dict[str, Any]) -> Dict[str, Any]:  # For testing only
         return {
             'action': 'sign',
             'invoice_id': entry.get('id'),
