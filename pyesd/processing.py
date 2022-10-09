@@ -6,7 +6,7 @@ from typing import Any, Dict
 from datetime import datetime
 from pyesd.esd_service import ESD
 
-class SignPayments:	
+class SignPayment:	
     def __init__(
         self,
         db_uri: str,
@@ -83,7 +83,7 @@ class SignPayments:
                     else:
                         print(f'Request from Tax Service: {message}')
                         esd_response = json.dumps(
-                            self._sign(  # TODO: Replace with _sign_mock(payload) when testing.
+                            self._sign(  # TODO: Replace with _sign_mock(payload) when testing.Update pro
                                 payload
                             )
                         )
@@ -116,5 +116,5 @@ if __name__ == "__main__":
     esd_password = 'esdadmin2016'
 
     # Signing Invoices
-    sign_invoices = SignPayments(uri, headers, esd_username, esd_password, esd_endpoint, esd_query_endpoint)
+    sign_invoices = SignPayment(uri, headers, esd_username, esd_password, esd_endpoint, esd_query_endpoint)
     asyncio.get_event_loop().run_until_complete(sign_invoices.run())
